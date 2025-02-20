@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
 import ActionBar from "@/components/ActionBar.vue";
 import Editor from "@/components/Editor.vue";
 import {ref} from "vue";
+import * as constants from "constants";
 
 let EDID = ref<number[]>([]);
 
@@ -50,13 +49,73 @@ function onAction(action: string) {
       console.log("Loading example data...");
       loadExample();
       break;
+    case "load-file":
+      console.log("Loading data from file...");
+      loadFile();
+      break;
+    case "load-clipboard":
+      console.log("Loading data from clipboard...");
+      loadClipboard();
+      break;
     default:
       console.error("Unknown action: ", action);
   }
+}
+
+async function loadClipboard() {
+  const contents = await navigator.clipboard.read();
+  let result = [];
+  for (const item of contents) {
+    if (item.types.includes("text/plain")) {
+      const blob = await item.getType("text/plain");
+      let pasted = await blob.text();
+      if (pasted.startsWith("b'") || pasted.startsWith('b"')) {
+        pasted = pasted.slice(2, -1);
+        while (pasted.length > 0) {
+          if (pasted.startsWith('\\x')) {
+            let num = pasted.substring(2, 4);
+            pasted = pasted.substring(4);
+            result.push(parseInt(num, 16));
+          } else if (pasted.startsWith('\\')) {
+            let char = pasted.charCodeAt(1);
+            pasted = pasted.substring(2);
+            result.push(char);
+          } else {
+            let char = pasted.charCodeAt(0);
+            pasted = pasted.substring(1);
+            result.push(char);
+          }
+        }
+        EDID.value = result;
+      }
+    }
+  }
+}
+
+function loadFile() {
+  const fileElem = document.getElementById("fileselector");
+  fileElem.click();
+}
+
+function handleFileSelection(event) {
+  const file = event.target.files[0];
+  if (!file) {
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const arr = new Uint8Array(reader.result as ArrayBuffer);
+    EDID.value = Array.from(arr);
+  };
+  reader.onerror = () => {
+    console.error("File reader had an error");
+  };
+  reader.readAsArrayBuffer(file);
 }
 </script>
 
 <template>
   <ActionBar @action="onAction"/>
   <Editor :EDID="EDID"/>
+  <input type="file" id="fileselector" style="display: none;" @change="handleFileSelection">
 </template>

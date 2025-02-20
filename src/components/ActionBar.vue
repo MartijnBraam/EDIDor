@@ -3,10 +3,10 @@
     <h1>EDIDor</h1>
     <ul>
       <li>
-        <button>Load from clipboard</button>
+        <button @click="loadClipboard">Load from clipboard</button>
       </li>
       <li>
-        <button>Load from file</button>
+        <button @click="loadFile">Load from file</button>
       </li>
       <li>
         <button @click="loadExample">Load example</button>
@@ -20,6 +20,14 @@ const emit = defineEmits(['action'])
 
 function loadExample() {
   emit('action', 'load-example');
+}
+
+function loadFile() {
+  emit('action', 'load-file');
+}
+
+function loadClipboard() {
+  emit('action', 'load-clipboard');
 }
 </script>
 
