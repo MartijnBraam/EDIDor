@@ -156,7 +156,7 @@ export class DDRangeLimits {
     max_v_rate: number = 0;
     min_h_rate: number = 0;
     max_h_rate: number = 0;
-    max_pixelclock: number = 0;
+    _max_pixelclock: number = 0;
     timing_support_flags: number = 0;
 
     private parser: Struct;
@@ -181,7 +181,7 @@ export class DDRangeLimits {
         this.max_v_rate = parsed["v_max"] as number;
         this.min_h_rate = parsed["h_min"] as number;
         this.max_h_rate = parsed["h_max"] as number;
-        this.max_pixelclock = parsed["p_max"] as number;
+        this._max_pixelclock = parsed["p_max"] as number;
         this.timing_support_flags = parsed["timing_support"] as number;
     }
 
@@ -193,11 +193,19 @@ export class DDRangeLimits {
             v_max: this.max_v_rate,
             h_min: this.min_h_rate,
             h_max: this.max_h_rate,
-            p_max: this.max_pixelclock,
+            p_max: this._max_pixelclock,
             timing_support: this.timing_support_flags,
             timing1: 0x1a,
             timing2: 0x20,
         });
+    }
+
+    public get max_pixelclock() {
+        return this._max_pixelclock * 10;
+    }
+
+    public set max_pixelclock(val) {
+        this._max_pixelclock = Math.floor(val / 10);
     }
 }
 

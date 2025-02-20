@@ -3,6 +3,9 @@
     Empty descriptor
     <a @click="addDescriptor('serial')">Add Serial</a>
     <a @click="addDescriptor('name')">Product Name</a>
+    <a @click="addDescriptor('data')">ASCII Data</a>
+    <a @click="addDescriptor('rangelimits')">Range limits</a>
+    <a @click="addDescriptor('dtd')">DTD</a>
   </div>
 
   <div v-if="model !== undefined && model.type === 'serial'" class="panel">
@@ -23,10 +26,19 @@
     </header>
     <FieldString label="Data" v-model="model.data" max="13" @change="change"/>
   </div>
+
   <div v-if="model !== undefined && model.type === 'rangelimits'" class="panel">
     <header>Display Range Limits
       <button @click="deleteDescriptor">X</button>
     </header>
+    <FieldInt label="Min. vertical rate" v-model="model.min_v_rate" @change="change"/>
+    <FieldInt label="Max. vertical rate" v-model="model.max_v_rate" @change="change"/>
+    <hr/>
+    <FieldInt label="Min. horiz. rate" v-model="model.min_h_rate" @change="change"/>
+    <FieldInt label="Max. horiz. rate" v-model="model.max_h_rate" @change="change"/>
+    <hr/>
+    <FieldInt label="Max. Pixel Clock" v-model="model.max_pixelclock" @change="change"/>
+
   </div>
 
   <div v-if="model !== undefined && model.type === 'dtd'" class="panel">
@@ -119,7 +131,7 @@ hr {
 <script setup lang="ts">
 import FieldInt from "@/components/FieldInt.vue";
 import FieldString from "@/components/FieldString.vue";
-import {DDProductName, DDSerialNumber} from "@/edid";
+import {DDAlphanumericData, DDProductName, DDRangeLimits, DDSerialNumber, DTD} from "@/edid";
 
 const props = defineProps(['label'])
 const model = defineModel();
@@ -143,6 +155,16 @@ function addDescriptor(dt) {
     case 'name':
       model.value = new DDProductName();
       break;
+    case 'data':
+      model.value = new DDAlphanumericData();
+      break;
+    case 'rangelimits':
+      model.value = new DDRangeLimits();
+      break;
+    case 'dtd':
+      model.value = new DTD();
+      break;
+
   }
 }
 </script>
