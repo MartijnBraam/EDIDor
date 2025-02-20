@@ -6,8 +6,8 @@
     <div id="right">
       <SummaryView v-model="edidBlockBase" :canary="canary"/>
       <div class="sbs">
-        <HexView :data="EDID"/>
-        <HexView :data="exported"/>
+        <HexView :data="EDID" title="Hex view (original)"/>
+        <HexView :data="exported" title="Hex view (edited)"/>
       </div>
     </div>
   </div>

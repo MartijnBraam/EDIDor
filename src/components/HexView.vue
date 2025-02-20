@@ -1,6 +1,8 @@
 <template>
   <section class="editor">
-    <header>HEX View</header>
+    <header>{{title}}
+      <button @click="download">Download</button>
+    </header>
     <div class="hexeditor">
       <div class="row" v-for="row in hexdump">
       <span v-for="group in row">
@@ -8,11 +10,23 @@
       </span>
       </div>
     </div>
+    <div v-if="hexdump.length === 0">No data loaded</div>
   </section>
 
 </template>
 
 <style scoped>
+button {
+  background: var(--color-brand);
+  border: none;
+  float: right;
+  border-radius: 5px;
+  color: black;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 4px;
+}
+
 div > span {
   margin-right: 10px;
 }
@@ -29,7 +43,8 @@ import {EDIDBaseBlock} from "@/edid";
 
 let hexdump = ref([]);
 const props = defineProps<{
-  data: number[]
+  data: number[],
+  title: string,
 }>();
 
 let proxy = computed(() => props.data.slice());
@@ -60,4 +75,17 @@ watch(proxy, (bytes) => {
   }
   hexdump.value = rows;
 });
+
+function download() {
+  const nums = new Uint8Array(props.data.slice());
+  const blob = new Blob([nums.buffer], {type: "application/octet-stream"});
+  const url = URL.createObjectURL(blob);
+  const el = document.createElement('A');
+  el.setAttribute("href", url);
+  el.setAttribute('download', "edid.bin");
+  el.style.display = 'none';
+  document.body.appendChild(el);
+  el.click();
+  document.body.removeChild(el);
+}
 </script>
