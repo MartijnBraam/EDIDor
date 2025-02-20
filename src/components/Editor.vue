@@ -40,7 +40,7 @@ import {EDIDBaseBlock} from "@/edid";
 import SummaryView from "@/components/SummaryView.vue";
 
 let edidBlockBase = ref(new EDIDBaseBlock());
-let exported = ref([]);
+let exported = ref([] as number[]);
 let canary = ref(0);
 
 const props = defineProps<{

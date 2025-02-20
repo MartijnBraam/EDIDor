@@ -4,6 +4,7 @@ type FormatPart = {
     size: number;
     count: number;
     ptype: string;
+    name: string;
     var: string;
     color: string;
 };
@@ -26,7 +27,7 @@ export class Struct {
         this.format = this.parseFormat();
     }
 
-    public describeIndex(index: number): FormatPart {
+    public describeIndex(index: number): FormatPart | undefined {
         for (let i = 0; i < this.format.length; i++) {
             const f = this.format[i];
             if (f.format == "x") {
@@ -52,7 +53,7 @@ export class Struct {
         let var_slice = 0;
         let quote = '';
         let endianness = '@';
-        let result = [];
+        let result: FormatPart[] = [];
         let index = 0;
         for (let i = 0; i < this.fmt.length; i++) {
             let c = this.fmt[i];

@@ -48,8 +48,10 @@ span#val {
 </style>
 
 <script setup lang="ts">
+import {Timing} from "@/edid";
+
 const props = defineProps(['label'])
-const model = defineModel();
+const model = defineModel({type: Timing});
 
 const emit = defineEmits(['change'])
 

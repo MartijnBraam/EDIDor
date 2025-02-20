@@ -1,6 +1,6 @@
 <template>
   <section class="editor">
-    <header>{{title}}
+    <header>{{ title }}
       <button @click="download">Download</button>
     </header>
     <div class="hexeditor">
@@ -41,7 +41,7 @@ div > span > span {
 import {computed, reactive, ref, watch} from "vue";
 import {EDIDBaseBlock} from "@/edid";
 
-let hexdump = ref([]);
+let hexdump = ref([] as Groups[]);
 const props = defineProps<{
   data: number[],
   title: string,
@@ -50,11 +50,16 @@ const props = defineProps<{
 let proxy = computed(() => props.data.slice());
 let edidParser = new EDIDBaseBlock();
 
+type Byte = { val: string, desc: string }
+type Group = Byte[];
+type Groups = Group[];
+type Row = Groups[];
+
 watch(proxy, (bytes) => {
-  let rows = [];
-  let groups = [];
+  let rows: Groups[] = [];
+  let groups: Group[] = [];
   for (let i = 0; i < bytes.length; i += 4) {
-    let group = [];
+    let group: Group = [];
     for (let j = i; j < Math.min(i + 4, bytes.length); j++) {
       let hex = bytes[j].toString(16).padStart(2, '0');
       let desc = edidParser.parser.describeIndex(j);

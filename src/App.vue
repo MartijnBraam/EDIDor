@@ -2,7 +2,6 @@
 import ActionBar from "@/components/ActionBar.vue";
 import Editor from "@/components/Editor.vue";
 import {ref} from "vue";
-import * as constants from "constants";
 
 let EDID = ref<number[]>([]);
 
@@ -64,7 +63,7 @@ function onAction(action: string) {
 
 async function loadClipboard() {
   const contents = await navigator.clipboard.read();
-  let result = [];
+  let result: number[] = [];
   for (const item of contents) {
     if (item.types.includes("text/plain")) {
       const blob = await item.getType("text/plain");
@@ -94,7 +93,7 @@ async function loadClipboard() {
 
 function loadFile() {
   const fileElem = document.getElementById("fileselector");
-  fileElem.click();
+  fileElem?.click();
 }
 
 function handleFileSelection(event) {

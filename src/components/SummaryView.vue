@@ -90,7 +90,8 @@ th, td {
 
 <script setup lang="ts">
 import {computed, defineModel, reactive, ref, watch} from "vue";
-import {DD, DDProductName, DDSerialNumber, DTD, EDIDBaseBlock} from "@/edid";
+import type {DD} from "@/edid";
+import {DDProductName, DDSerialNumber, DTD, EDIDBaseBlock} from "@/edid";
 
 const props = defineProps(['canary']);
 const model = defineModel();
@@ -174,7 +175,7 @@ function getResolution(data: EDIDBaseBlock) {
 }
 
 function rebuild() {
-  const data = model.value;
+  const data: EDIDBaseBlock = model.value as EDIDBaseBlock;
   date.value = `${data.year}-${data.week.toString(10).padStart(2, '0')}`;
   getName(data as EDIDBaseBlock);
   getSerial(data as EDIDBaseBlock);

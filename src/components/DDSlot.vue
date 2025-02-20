@@ -128,7 +128,7 @@ hr {
 }
 </style>
 
-<script setup lang="ts">
+<script setup>
 import FieldInt from "@/components/FieldInt.vue";
 import FieldString from "@/components/FieldString.vue";
 import {DDAlphanumericData, DDProductName, DDRangeLimits, DDSerialNumber, DTD} from "@/edid";

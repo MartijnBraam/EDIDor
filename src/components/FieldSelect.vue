@@ -29,17 +29,11 @@ select {
 </style>
 
 <script setup lang="ts">
-import {computed} from "vue";
 
 const props = defineProps(['name', 'label', 'model'])
 const model = defineModel();
 
 const emit = defineEmits(['change'])
-function update(event) {
-  model.value = parseInt(event.target.value, 10);
-  emit('change', model.value);
-}
 
-const displayValue = computed(() => model.value?.toString(10).toUpperCase());
 </script>
 

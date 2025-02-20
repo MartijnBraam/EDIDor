@@ -30,7 +30,7 @@ input {
 import {computed} from "vue";
 
 const props = defineProps(['name', 'label', 'model'])
-const model = defineModel();
+const model = defineModel({type: Number});
 
 const emit = defineEmits(['change'])
 function update(event) {

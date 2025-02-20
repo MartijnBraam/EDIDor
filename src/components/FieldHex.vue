@@ -31,8 +31,8 @@ input {
 <script setup lang="ts">
 import {computed} from "vue";
 
-const props = defineProps(['name', 'label', 'model'])
-const model = defineModel();
+const props = defineProps(['name', 'label'])
+const model = defineModel({type: Number});
 
 const emit = defineEmits(['change'])
 

@@ -11,7 +11,7 @@ export class EDIDExtensionBlock extends EDIDBlock {
     }
 }
 
-type Coordinate = {
+export type Coordinate = {
     x: number;
     y: number;
 }
@@ -161,7 +161,7 @@ export class DDRangeLimits {
 
     private parser: Struct;
 
-    public fromBytes(raw: Bytes): void {
+    constructor() {
         this.parser = new Struct("3xB B BB BB B BBB", [
             "header",
             "flags",
@@ -174,6 +174,9 @@ export class DDRangeLimits {
             "timing1",
             "timing2",
         ]);
+    }
+
+    public fromBytes(raw: Bytes): void {
         let parsed = this.parser.parse(raw);
         console.log("PARSED", parsed);
         this.flags = parsed["flags"] as number;
@@ -251,7 +254,7 @@ export class DTD {
     height: number = 0;
     private parser: Struct;
 
-    public fromBytes(raw: Bytes): void {
+    constructor() {
         this.parser = new Struct("H BBB BBB BBB B BBB BB", [
             "pixel_clock",
             "h_addr_pixels",
@@ -270,6 +273,10 @@ export class DTD {
             "h_border",
             "v_border",
         ]);
+    }
+
+
+    public fromBytes(raw: Bytes): void {
         let parsed = this.parser.parse(raw);
         console.log("DTD", parsed);
 
@@ -615,10 +622,10 @@ export class EDIDBaseBlock extends EDIDBlock {
     }
 
     public toBytes(): Bytes {
-        let dd1 = [];
-        let dd2 = [];
-        let dd3 = [];
-        let dd4 = [];
+        let dd1: Bytes = [];
+        let dd2: Bytes = [];
+        let dd3: Bytes = [];
+        let dd4: Bytes = [];
         if (this.descriptor_1 !== undefined) {
             dd1 = this.descriptor_1.toBytes();
         }
@@ -646,7 +653,7 @@ export class EDIDBaseBlock extends EDIDBlock {
         }
 
         // Generate Standard Timings
-        let st = [];
+        let st: number[] = [];
         for (let i = 0; i < this.standard_timings.length; i++) {
             const b = this.standard_timings[i].toBytes();
             st.push(b[0]);
